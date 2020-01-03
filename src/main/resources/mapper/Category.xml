@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hwx.blog.mapper.CategoryMapper">
+
+    <resultMap id="BaseResultMap" type="com.hwx.blog.entity.Category">
+        <id column="category_id" property="categoryId" jdbcType="INTEGER"/>
+        <result column="category_pid" property="categoryPid" jdbcType="INTEGER"/>
+        <result column="category_name" property="categoryName" jdbcType="VARCHAR"/>
+        <result column="category_description" property="categoryDescription" jdbcType="VARCHAR"/>
+        <result column="category_order" property="categoryOrder" jdbcType="INTEGER"/>
+        <result column="category_icon" property="categoryIcon" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="selectCatgoryByArticleId" resultType="com.hwx.blog.entity.Category">
+        SELECT ac.category_id, c.category_pid, c.category_name FROM article_category_ref ac
+          LEFT JOIN category c ON ac.category_id = c.category_id WHERE ac.article_id = #{articleId}
+          ORDER BY c.category_pid ASC
+    </select>
+
+    <select id="listCategory" resultType="com.hwx.blog.entity.Category">
+        SELECT * FROM category
+    </select>
+
+    <delete id="deleteArticleCategory">
+        DELETE FROM article_category_ref WHERE article_category_ref.article_id = #{articleId}
+    </delete>
+
+    <insert id="addArticleCategory">
+        INSERT INTO article_category_ref(article_id, category_id) VALUES
+          <foreach collection="categoryList" item="categoryId" separator="," close=";">
+              (#{articleId}, #{categoryId})
+          </foreach>
+    </insert>
+
+    <select id="selectArticleCountByCategoryId" resultType="integer">
+        SELECT COUNT(article_id) FROM article_category_ref WHERE category_id = #{categoryId}
+    </select>
+
+    <insert id="insertOne">
+        INSERT INTO category(category_pid, category_name, category_description, category_order, category_icon)
+          VALUES(#{categoryPid}, #{categoryName}, #{categoryDescription}, #{categoryOrder}, #{categoryIcon})
+    </insert>
+
+    <delete id="deleteById">
+        DELETE FROM category WHERE category_id = #{id}
+    </delete>
+
+    <select id="selectById" resultType="com.hwx.blog.entity.Category">
+        SELECT * FROM category WHERE category_id = #{id}
+    </select>
+
+</mapper>

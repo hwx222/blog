@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hwx.blog.mapper.CommentMapper">
+
+    <resultMap id="BaseResultMap" type="com.hwx.blog.entity.Comment">
+
+    </resultMap>
+
+    <select id="listRecentComment" resultType="com.hwx.blog.entity.Comment">
+        SELECT * FROM comment WHERE comment_role=0 ORDER BY comment_create_time DESC LIMIT #{limit}
+    </select>
+
+    <select id="getCommentList" resultType="com.hwx.blog.entity.Comment">
+        SELECT * FROM comment ORDER BY comment_id DESC
+    </select>
+
+    <delete id="deleteById">
+        DELETE FROM comment WHERE comment_id = #{id} || comment_pid = #{id}
+    </delete>
+
+</mapper>

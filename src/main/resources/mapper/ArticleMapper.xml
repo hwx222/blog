@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hwx.blog.mapper.ArticleMapper">
+
+    <resultMap id="BaseResultMap" type="com.hwx.blog.entity.Article">
+
+    </resultMap>
+
+    <select id="listRecentArticle" resultType="com.hwx.blog.entity.Article">
+        SELECT * FROM article ORDER BY article_create_time DESC LIMIT #{limit}
+    </select>
+
+    <select id="selectArticleList" resultType="com.hwx.blog.entity.Article">
+        SELECT * FROM article a WHERE a.article_status &lt;&gt; -1
+    </select>
+
+    <update id="deleteById">
+        update article set article_status = -1 WHERE article_id = #{id}
+    </update>
+
+    <select id="selectById" resultType="com.hwx.blog.entity.Article">
+        SELECT * FROM article WHERE article_id = #{id}
+    </select>
+
+    <update id="update" parameterType="com.hwx.blog.entity.Article">
+        UPDATE article a SET a.article_title = #{articleTitle}, a.article_content = #{articleContent}
+          , a.article_order = #{articleOrder}, a.article_status = #{articleStatus}
+          WHERE a.article_id = #{articleId}
+    </update>
+
+    <select id="getArticleCountByCategoryId" resultType="integer">
+        SELECT COUNT(article_id) FROM article_category_ref WHERE category_id = #{id}
+    </select>
+
+    <insert id="insertOne" useGeneratedKeys="true" keyProperty="articleId">
+        INSERT INTO article(article_title, article_content, article_status) VALUES(#{articleTitle}, #{articleContent}, #{articleStatus})
+    </insert>
+
+</mapper>

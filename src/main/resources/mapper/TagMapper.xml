@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hwx.blog.mapper.TagMapper">
+
+    <resultMap id="BaseResultMap" type="com.hwx.blog.entity.Tag">
+
+    </resultMap>
+
+    <select id="selectTagByArticleId" resultType="com.hwx.blog.entity.Tag">
+        SELECT atr.*, tag.tag_name FROM article_tag_ref atr LEFT JOIN tag
+          ON atr.tag_id = tag.tag_id WHERE atr.article_id = #{id}
+    </select>
+
+    <select id="listTag" resultType="com.hwx.blog.entity.Tag">
+        SELECT * FROM tag
+    </select>
+
+    <delete id="deleteArticleTag">
+        DELETE FROM article_tag_ref WHERE article_tag_ref.article_id = #{articleId}
+    </delete>
+
+    <insert id="addArticleTag">
+        INSERT INTO article_tag_ref(article_id, tag_id) VALUES
+          <foreach collection="tagList" item="tagId" separator=",">
+              (#{articleId}, #{tagId})
+          </foreach>
+    </insert>
+
+    <select id="listTagWithArticleCount" resultType="com.hwx.blog.entity.Tag">
+        SELECT t.*, COUNT(atr.article_id) articleCount from tag t LEFT JOIN article_tag_ref atr ON t.tag_id = atr.tag_id GROUP BY t.tag_id
+    </select>
+
+    <insert id="insertOne">
+        INSERT INTO tag(tag_name, tag_description) VALUES (#{tagName}, #{tagDescription});
+    </insert>
+
+    <select id="selectArticleCountByTagId" resultType="integer">
+        SELECT COUNT(article_id) FROM article_tag_ref WHERE tag_id = #{id}
+    </select>
+
+    <delete id="deleteById">
+        DELETE FROM tag WHERE tag_id = #{id}
+    </delete>
+
+    <select id="selectById" resultType="com.hwx.blog.entity.Tag">
+        SELECT * FROM tag where tag_id = #{id}
+    </select>
+
+    <update id="updateOne">
+        UPDATE tag SET tag_name = #{tagName}, tag_description = #{tagDescription} WHERE tag_id = #{tagId}
+    </update>
+
+</mapper>

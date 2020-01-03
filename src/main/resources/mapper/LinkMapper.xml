@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hwx.blog.mapper.LinkMapper">
+
+    <select id="getLinkList" resultType="com.hwx.blog.entity.Link">
+        SELECT * FROM link WHERE link_status &lt;&gt; -1
+    </select>
+
+    <select id="selectOne" resultType="com.hwx.blog.entity.Link">
+        SELECT * FROM link WHERE link_id = #{id}
+    </select>
+
+    <update id="update" parameterType="com.hwx.blog.entity.Link">
+        UPDATE link
+        <set>
+            <if test="linkName != null">
+                link_name = #{linkName},
+            </if>
+            <if test="linkUrl != null">
+                link_url = #{linkUrl},
+            </if>
+            <if test="linkOwnerContact != null">
+                link_owner_contact = #{linkOwnerContact},
+            </if>
+            <if test="linkDescription != null">
+                link_description = #{linkDescription},
+            </if>
+            <if test="linkOrder != null">
+                link_order = #{linkOrder},
+            </if>
+              <if test="linkStatus != null">
+                  link_status = #{linkStatus},
+              </if>
+        </set>
+        WHERE link_id = #{linkId}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM link WHERE link_id = #{id}
+    </delete>
+
+    <insert id="insertOne">
+        INSERT INTO link(link_url, link_name, link_description, link_owner_contact, link_order) VALUES(#{linkUrl}, #{linkName}, #{linkDescription}, #{linkOwnerContact}, #{linkOrder})
+    </insert>
+
+</mapper>
